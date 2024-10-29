@@ -1,0 +1,152 @@
+﻿@model PersonAddRequest
+
+@{
+    ViewBag.Title = "Create Person";
+}
+
+<a href="~/persons/index" class="link-hover">Back to Persons List</a>
+<h2>Create Person</h2>
+
+<div class="w-50">
+    <form action="~/persons/create" method="post">
+
+        @*PersonName*@
+        <div class="form-field flex">
+            <div class="w-25">
+                <label asp-for="PersonName" class="form-label pt">Person Name</label>
+            </div>
+            <div class="flex-1">
+                @* <input type="text" id="PersonName" name="PersonName" class="form-input" /> *@
+                <input asp-for="PersonName" class="form-input" />
+                @* type="text" will be taken from model propertie's DataType attribute, else default is "text", check page source *@
+
+                <span asp-validation-for="PersonName" class="text-red"></span>   @* This will be used to display validation error messages which is set in Model attributes*@
+            </div>
+        </div>
+
+
+        @*Email*@
+        <div class="form-field flex">
+            <div class="w-25">
+                <label asp-for="Email" class="form-label pt">Email</label>
+            </div>
+            <div class="flex-1">
+                <input type="email" asp-for="Email" class="form-input" />
+                <span asp-validation-for="Email" class="text-red"></span>
+            </div>
+        </div>
+
+        @*DateOfBirth*@
+        <div class="form-field flex">
+            <div class="w-25">
+                <label asp-for="DateOfBirth" class="form-label pt">Date of Birth</label>
+            </div>
+            <div class="flex-1">
+                <input type="date" asp-for="DateOfBirth" class="form-input" />
+                <span asp-validation-for="DateOfBirth" class="text-red"></span>
+            </div>
+        </div>
+
+        @*Gender*@
+        <div class="form-field flex">
+            <div class="w-25">
+                <label class="form-label">Gender</label>
+            </div>
+            <div class="flex-1">
+                <input type="radio" id="Male" name="Gender" value="Male" />
+                <label for="Male">Male</label>
+
+                <input type="radio" id="Female" name="Gender" value="Female" class="ml" />
+                <label for="Female">Female</label>
+
+                <input type="radio" id="Other" name="Gender" value="Other" class="ml" />
+                <label for="Other">Other</label>
+            </div>
+        </div>
+
+        @*Country*@
+        <div class="form-field flex">
+            <div class="w-25">
+                <label class="form-label" for="CountryId">Country</label>
+            </div>
+            <div class="flex-1">
+                @* <select name="CountryId" id="CountryId" class="form-input">
+                <option value="">Please Select</option>
+                @foreach (CountryResponse country in ViewBag.Countries)
+                {
+                <option value="@country.CountryId">@country.CountryName</option>
+                }
+                </select> *@
+
+                <select asp-for="CountryID" asp-items="ViewBag.Countries" class="form-input">
+                    <option value="">Please Select</option>
+                </select>
+                <span asp-validation-for="CountryID" class="text-red"></span>
+
+            </div>
+        </div>
+
+
+        @*Address*@
+        <div class="form-field flex">
+            <div class="w-25">
+                <label asp-for="Address" class="form-label pt">Address</label>
+            </div>
+            <div class="flex-1">
+                <textarea asp-for="Address" class="form-input"></textarea>
+                <span asp-validation-for="Address" class="text-red"></span>
+
+            </div>
+        </div>
+
+        @*ReceiveNewsLetters*@
+        <div class="form-field flex">
+            <div class="w-25">
+            </div>
+            <div class="flex-1">
+                <input asp-for="ReceiveNewsLetters" value="true" />
+                <label asp-for="ReceiveNewsLetters" class="form-label">Receive News Letters</label>
+            </div>
+        </div>
+
+        @*Submit*@
+        <div class="form-field flex">
+            <div class="w-25">
+            </div>
+            <div class="flex-1">
+                <button class="button button-green-back">Create</button>
+                <div asp-validation-summary="All" class="text-red"></div> @* To display all error messages, if there are more number of fileds in form, so user can get error easily *@
+                @if (ViewBag.Errors != null)
+                {
+                    <div class="text-red ml">
+                        <ul>
+                            @foreach (string error in ViewBag.Errors)
+                            {
+                                <li class="ml">@error</li>
+                            }
+                        </ul>
+                    </div>
+                }
+            </div>
+        </div>
+
+    </form>
+</div>
+
+@section scripts
+{
+    @* call this section in _Layout *@
+
+    @* Add jQuery cdns for client side validations, don't change order of imports for jQuery cdns, bcoz one is dependent on previous one *@
+
+    @* When you import this links, the post request will not be sent if client side validation errors are there (without writing any code for checking validation errors), if this links are not added then post request will be sent to server even if validation errors are there *@
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer" asp-fallback-test="wnidow.jQuery" asp-fallback-src="~/jQuery.min.js"></script> @*  Rgular jQuery file *@
+
+    @* if cdn doesn't work in any case then provide local file path to be executed via- asp-fallback-test="wnidow.jQuery" asp-fallback-src="~/jQuery.min.js" ---> if window.jQuery is undefined, then only local file will be used, which should be placed inside wwwroot (do same for below all) *@
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.21.0/jquery.validate.min.js" integrity="sha512-KFHXdr2oObHKI9w4Hv1XPKc898mE4kgYx58oqsc/JqqdLMDI4YjOLzom+EMlW8HFUd0QfjfAvxSL6sEq/a42fQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> @* For validations *@
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/4.0.0/jquery.validate.unobtrusive.min.js" integrity="sha512-xq+Vm8jC94ynOikewaQXMEkJIOBp7iArs3IhFWSWdRT3Pq8wFz46p+ZDFAR7kHnSFf+zUv52B3prRYnbDRdgog==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> @* To display validations messages, without changing exissting dot net code *@
+
+}
